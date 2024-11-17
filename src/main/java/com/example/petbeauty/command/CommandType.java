@@ -1,16 +1,12 @@
-package com.example.petbeauty.controller.command;
+package com.example.petbeauty.command;
 
-import com.example.petbeauty.controller.command.impl.DefaultCommand;
-import com.example.petbeauty.controller.command.impl.LoginCommand;
-import com.example.petbeauty.controller.command.impl.LogoutCommand;
-import com.example.petbeauty.controller.command.impl.MultiplyCommand;
-import com.example.petbeauty.controller.command.impl.SignupCommand;
+import com.example.petbeauty.command.impl.*;
 
 public enum CommandType {
     LOGIN(new LoginCommand()),
     LOGOUT(new LogoutCommand()),
-//    SIGNUP(new SignupCommand()),
-    MULTIPLY(new MultiplyCommand()),
+    SIGNUP(new SignupCommand()),
+    VERIFY(new VerifyCommand()),
     DEFAULT(new DefaultCommand());
 
     final Command command;
@@ -20,6 +16,10 @@ public enum CommandType {
     }
 
     public static Command chooseCommand(String command) {
+        if (command == null || command.isBlank()) {
+            return DEFAULT.command;
+        }
+
         try {
             return CommandType.valueOf(command.toUpperCase()).command;
         } catch (IllegalArgumentException e) {

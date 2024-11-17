@@ -1,4 +1,4 @@
-package com.example.petbeauty.controller.command;
+package com.example.petbeauty.command;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,5 +7,5 @@ import java.sql.SQLException;
 
 @FunctionalInterface
 public interface Command {
-    String execute(HttpServletRequest request) throws ServletException, IOException, SQLException;
+    Router execute(HttpServletRequest request) throws ServletException, IOException, SQLException;
 }

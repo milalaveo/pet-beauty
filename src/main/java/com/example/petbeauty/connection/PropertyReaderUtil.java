@@ -1,4 +1,4 @@
-package com.example.petbeauty.controller.dao.connection;
+package com.example.petbeauty.connection;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,13 +8,13 @@ public class PropertyReaderUtil {
     private static final Properties properties = new Properties();
 
     static {
-        try (InputStream input = PropertyReaderUtil.class.getClassLoader().getResourceAsStream("database.properties")) {
+        try (InputStream input = PropertyReaderUtil.class.getClassLoader().getResourceAsStream("application.properties")) {
             if (input == null) {
-                throw new IOException("Unable to find database.properties");
+                throw new IOException("Unable to find application.properties");
             }
             properties.load(input);
         } catch (IOException ex) {
-            throw new RuntimeException("Failed to load database properties", ex);
+            throw new RuntimeException("Failed to load application properties", ex);
         }
     }
 

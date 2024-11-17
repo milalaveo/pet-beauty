@@ -1,7 +1,8 @@
 package com.example.petbeauty.controller;
 
-import com.example.petbeauty.controller.command.Command;
-import com.example.petbeauty.controller.command.CommandType;
+import com.example.petbeauty.command.Command;
+import com.example.petbeauty.command.CommandType;
+import com.example.petbeauty.command.Router;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -47,15 +48,16 @@ public class Controller extends HttpServlet {
         logger.debug("Request params: {}", request.getParameterMap());
         String commandStr = request.getParameter("command");
 
-        if (commandStr == null || commandStr.isEmpty()) {
-            commandStr = "default";
-        }
-
         logger.debug("Selected command: {}", commandStr);
 
         Command command = CommandType.chooseCommand(commandStr);
-        String page = command.execute(request);
-        request.getRequestDispatcher(page).forward(request, response);
+        Router page = command.execute(request);
+
+        if (page.isRedirect()) {
+            response.sendRedirect(page.getPage());
+        } else {
+            request.getRequestDispatcher(page.getPage()).forward(request, response);
+        }
     }
 
     public void destroy() {
