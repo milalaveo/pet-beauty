@@ -4,7 +4,9 @@
 
 
 ## ✨ What is PetBeautySalon?  
+
 ### PetBeautySalon is a web-based application designed to streamline the operations of a pet salon. The platform allows clients to book services while providing administrators with tools to manage appointments, services, and billing efficiently.
+
 ---
 
 ## 🐶 Features

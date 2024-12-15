@@ -7,6 +7,8 @@ public enum CommandType {
     LOGOUT(new LogoutCommand()),
     SIGNUP(new SignupCommand()),
     VERIFY(new VerifyCommand()),
+    DASHBOARD(new DashboardCommand()),
+    EDIT_SERVICE(new EditServiceCommand()),
     DEFAULT(new DefaultCommand());
 
     final Command command;

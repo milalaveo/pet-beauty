@@ -71,4 +71,13 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("Error while trying to verify", e);
         }
     }
+
+    @Override
+    public User findUser(String username) throws ServiceException {
+        try {
+            return userDao.findByUsername(username);
+        } catch (DaoException e) {
+            throw new ServiceException("Error while finding user", e);
+        }
+    }
 }
