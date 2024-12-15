@@ -5,6 +5,8 @@ import com.example.petbeauty.connection.ConnectionPool;
 import com.example.petbeauty.dao.UserDao;
 import com.example.petbeauty.exception.DaoException;
 import com.example.petbeauty.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,6 +14,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class UserDaoImpl implements UserDao {
+    private static final Logger logger = LogManager.getLogger(UserDao.class);
     private static final String INSERT_USER = "INSERT INTO users (username, password, firstname, lastname, email, verification_code) VALUES (?, ?, ?, ?, ?, ?)";
     private static final String UPDATE_USER = "UPDATE users set username = ?, password = ?, firstname = ?, lastname = ?, email = ?, verification_code = ? WHERE id = ?";
     private static final String FIND_BY_USERNAME = "SELECT * FROM users WHERE username = ?";
@@ -19,8 +22,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public boolean saveUser(User user) throws DaoException {
-        PreparedStatement preparedStatement;
-        Connection connection;
+        PreparedStatement preparedStatement = null;
+        Connection connection = null;
+
         try {
             connection = ConnectionPool.getInstance().getConnection();
             preparedStatement = connection.prepareStatement(INSERT_USER);
@@ -32,17 +36,26 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setString(6, user.getVerificationCode());
             preparedStatement.executeUpdate();
 
-            ConnectionPool.getInstance().releaseConnection(connection);
-
             return true;
         } catch (SQLException e) {
             throw new DaoException("Error saving user: " + e.getMessage(), e);
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    logger.error("Error while closing prepared statement", e);
+                }
+            }
+            if (connection != null) {
+                ConnectionPool.getInstance().releaseConnection(connection);
+            }
         }
     }
 
     public boolean updateUser(User user) throws DaoException {
-        PreparedStatement preparedStatement;
-        Connection connection;
+        PreparedStatement preparedStatement = null;
+        Connection connection = null;
 
         try {
             connection = ConnectionPool.getInstance().getConnection();
@@ -56,11 +69,20 @@ public class UserDaoImpl implements UserDao {
             preparedStatement.setInt(7, user.getUserId());
             preparedStatement.executeUpdate();
 
-            ConnectionPool.getInstance().releaseConnection(connection);
-
             return true;
         } catch (SQLException e) {
             throw new DaoException("Error updating user: " + e.getMessage(), e);
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    logger.error("Error while closing prepared statement", e);
+                }
+            }
+            if (connection != null) {
+                ConnectionPool.getInstance().releaseConnection(connection);
+            }
         }
     }
 
@@ -68,7 +90,7 @@ public class UserDaoImpl implements UserDao {
     public User findByUsername(String username) throws DaoException {
         try {
             return findUser(FIND_BY_USERNAME, username);
-        } catch (SQLException e) {
+        } catch (DaoException e) {
             throw new DaoException("Error finding user by username: " + e.getMessage(), e);
         }
     }
@@ -77,33 +99,51 @@ public class UserDaoImpl implements UserDao {
     public User findByVerificationCode(String verificationCode) throws DaoException {
         try {
             return findUser(FIND_BY_VERIFICATION_CODE, verificationCode);
-        } catch (SQLException e) {
+        } catch (DaoException e) {
             throw new DaoException("Error finding user by username: " + e.getMessage(), e);
         }
     }
 
-    private User findUser(String query, String value) throws SQLException {
-        Connection connection = ConnectionPool.getInstance().getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(query);
+    private User findUser(String query, String value) throws DaoException {
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
 
-        preparedStatement.setString(1, value);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        User user = null;
+        try {
+            connection = ConnectionPool.getInstance().getConnection();
+            preparedStatement = connection.prepareStatement(query);
 
-        if (resultSet.next()) {
-            user = new User(
-                    resultSet.getInt("id"),
-                    resultSet.getString("username"),
-                    resultSet.getString("password"),
-                    resultSet.getString("firstname"),
-                    resultSet.getString("lastname"),
-                    resultSet.getString("email"),
-                    resultSet.getString("verification_code")
-            );
+            preparedStatement.setString(1, value);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            User user = null;
+
+            if (resultSet.next()) {
+                user = new User(
+                        resultSet.getInt("id"),
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getString("firstname"),
+                        resultSet.getString("lastname"),
+                        resultSet.getString("email"),
+                        resultSet.getString("verification_code")
+                );
+            }
+
+            ConnectionPool.getInstance().releaseConnection(connection);
+
+            return user;
+        } catch (SQLException e) {
+            throw new DaoException("Error finding user: " + e.getMessage(), e);
+        } finally {
+            if (preparedStatement != null) {
+                try {
+                    preparedStatement.close();
+                } catch (SQLException e) {
+                    logger.error("Error while closing prepared statement", e);
+                }
+            }
+            if (connection != null) {
+                ConnectionPool.getInstance().releaseConnection(connection);
+            }
         }
-
-        ConnectionPool.getInstance().releaseConnection(connection);
-
-        return user;
     }
 }
