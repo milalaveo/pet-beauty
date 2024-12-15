@@ -1,6 +1,7 @@
 # PetBeautySalon
 
-![g10](https://github.com/user-attachments/assets/fdf7257a-aa8b-4cfb-af2d-5a4f668f0d9c)
+
+![pp](https://github.com/user-attachments/assets/50cd6e1f-c86e-4cac-9210-5237853e8cd1)
 
 
 ## ✨ What is PetBeautySalon?  
