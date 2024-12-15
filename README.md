@@ -29,8 +29,9 @@
 - **Connectivity**: JDBC for smooth database operations  
 - **Frontend**: HTML, CSS, and a sprinkle of JavaScript  
 
-## Database structure
-![pet-beauty drawio](https://github.com/user-attachments/assets/cccc62ec-182c-49eb-ade5-41d57bd1ab52)
+## Database
+![pet-beauty](https://github.com/user-attachments/assets/4a2a4858-ef0d-4e33-8e6e-e06482c878b3)
+
 
 ---
 
