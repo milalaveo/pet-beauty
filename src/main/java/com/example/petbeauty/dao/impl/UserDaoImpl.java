@@ -128,8 +128,6 @@ public class UserDaoImpl implements UserDao {
                 );
             }
 
-            ConnectionPool.getInstance().releaseConnection(connection);
-
             return user;
         } catch (SQLException e) {
             throw new DaoException("Error finding user: " + e.getMessage(), e);
