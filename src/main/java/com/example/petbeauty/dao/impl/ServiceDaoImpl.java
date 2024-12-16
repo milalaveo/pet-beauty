@@ -127,13 +127,13 @@ public class ServiceDaoImpl implements ServiceDao {
                         resultSet.getBigDecimal("price")
                 ));
             }
+
+            return services;
         } catch (SQLException e) {
             throw new DaoException("Error retrieving all services: " + e.getMessage(), e);
         } finally {
             closeResources(connection, statement, resultSet);
         }
-
-        return services;
     }
 
     @Override
@@ -156,13 +156,13 @@ public class ServiceDaoImpl implements ServiceDao {
                         resultSet.getBigDecimal("price")
                 ));
             }
+
+            return services;
         } catch (SQLException e) {
             throw new DaoException("Error retrieving all services: " + e.getMessage(), e);
         } finally {
             closeResources(connection, statement, resultSet);
         }
-
-        return services;
     }
 
     private void closeResources(Connection connection, Statement statement) {

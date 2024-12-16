@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <html>
@@ -33,13 +33,13 @@
                 <tbody>
                 <c:forEach var="request" items="${requests}">
                     <tr>
-                        <td>${request.serviceName}</td>
+                        <td>${request.serviceId}</td>
                         <td>${request.status}</td>
                         <td>${request.executionDate}</td>
                         <td>${request.executionTime}</td>
                         <td>
                             <form action="${pageContext.request.contextPath}/controller" method="post" style="display:inline">
-                                <input type="hidden" name="command" value="editRequest">
+                                <input type="hidden" name="command" value="edit_request">
                                 <input type="hidden" name="id" value="${request.id}">
                                 <button type="submit">Edit</button>
                             </form>
@@ -51,7 +51,7 @@
         </div>
 
         <div class="row">
-            <a href="${pageContext.request.contextPath}/pages/add_service.jsp">Add service</a>
+            <a href="${pageContext.request.contextPath}/controller?command=edit_request">Add request</a>
         </div>
     </div>
 </div>

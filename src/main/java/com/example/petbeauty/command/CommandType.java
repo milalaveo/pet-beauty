@@ -9,6 +9,8 @@ public enum CommandType {
     VERIFY(new VerifyCommand()),
     DASHBOARD(new DashboardCommand()),
     EDIT_SERVICE(new EditServiceCommand()),
+    EDIT_REQUEST(new EditRequestCommand()),
+    SAVE_REQUEST(new SaveRequestCommand()),
     DEFAULT(new DefaultCommand());
 
     final Command command;

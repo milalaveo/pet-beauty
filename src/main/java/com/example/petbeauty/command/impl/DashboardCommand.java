@@ -27,7 +27,7 @@ public class DashboardCommand implements Command {
             List<Request> requests = requestService.getRequestsByUserId(userId);
             request.setAttribute("requests", requests);
 
-            return new Router("pages/dashboard.jsp");
+            return new Router("pages/dashboard.jsp", Router.Type.FORWARD);
         } catch (ServiceException e) {
             return new Router("pages/login.jsp");
         }

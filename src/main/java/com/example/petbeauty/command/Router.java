@@ -4,7 +4,7 @@ public class Router {
     private String page = "index.jsp";
     private Type type = Type.REDIRECT;
 
-    enum Type {
+    public enum Type {
         FORWARD, REDIRECT
     }
 
