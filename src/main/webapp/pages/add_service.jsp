@@ -21,6 +21,7 @@
             <div class="error">${error}</div>
         </c:if>
     </div>
+    <!-- TODO: finish -->
 
     <div class="row">
         <form action="${pageContext.request.contextPath}/controller" method="post">

@@ -2,6 +2,7 @@ package com.example.petbeauty.service.impl;
 
 import com.example.petbeauty.dao.RequestDao;
 import com.example.petbeauty.dao.impl.RequestDaoImpl;
+import com.example.petbeauty.exception.DaoException;
 import com.example.petbeauty.exception.ServiceException;
 import com.example.petbeauty.model.Request;
 import com.example.petbeauty.service.RequestService;
@@ -18,17 +19,17 @@ public class RequestServiceImpl implements RequestService {
         try {
             Request request = new Request(0, userId, serviceId, status, LocalDate.parse(executionDate), LocalTime.parse(executionTime));
             return requestDao.saveRequest(request);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error creating request", e);
         }
     }
 
     @Override
-    public boolean editRequest(int id, int serviceId, String status, String executionDate, String executionTime) throws ServiceException {
+    public boolean editRequest(int id, int userId, int serviceId, String status, String executionDate, String executionTime) throws ServiceException {
         try {
-            Request request = new Request(id, 0, serviceId, status, LocalDate.parse(executionDate), LocalTime.parse(executionTime));
+            Request request = new Request(id, userId, serviceId, status, LocalDate.parse(executionDate), LocalTime.parse(executionTime));
             return requestDao.updateRequest(request);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error editing request", e);
         }
     }
@@ -37,7 +38,7 @@ public class RequestServiceImpl implements RequestService {
     public boolean deleteRequest(int requestId) throws ServiceException {
         try {
             return requestDao.deleteRequest(requestId);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error deleting request", e);
         }
     }
@@ -46,7 +47,7 @@ public class RequestServiceImpl implements RequestService {
     public Request getRequestById(int requestId) throws ServiceException {
         try {
             return requestDao.findRequestById(requestId);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error retrieving request", e);
         }
     }

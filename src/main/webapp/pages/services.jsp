@@ -18,6 +18,8 @@
     <div class="error">${error}</div>
 </c:if>
 
+<!-- TODO: finish -->
+
 <table>
     <thead>
     <tr>
@@ -45,6 +47,6 @@
     </tbody>
 </table>
 
-<a href="${pageContext.request.contextPath}/pages/edit_service.jsp">Add service</a>
+<a href="${pageContext.request.contextPath}/pages/add_service.jsp">Add service</a>
 </body>
 </html>

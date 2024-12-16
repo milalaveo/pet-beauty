@@ -2,18 +2,14 @@ package com.example.petbeauty.command.impl;
 
 import com.example.petbeauty.command.Command;
 import com.example.petbeauty.command.Router;
-import com.example.petbeauty.dao.RequestDao;
-import com.example.petbeauty.dao.impl.RequestDaoImpl;
-import com.example.petbeauty.exception.DaoException;
-import com.example.petbeauty.model.Request;
+import com.example.petbeauty.exception.ServiceException;
+import com.example.petbeauty.service.RequestService;
+import com.example.petbeauty.service.impl.RequestServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-
 public class SaveRequestCommand implements Command {
-    private final RequestDao requestDao = new RequestDaoImpl();
+    private final RequestService requestService = new RequestServiceImpl();
 
     @Override
     public Router execute(HttpServletRequest request) {
@@ -36,20 +32,16 @@ public class SaveRequestCommand implements Command {
 
         try {
             int serviceId = Integer.parseInt(serviceIdParam);
-            LocalDate executionDate = LocalDate.parse(executionDateParam);
-            LocalTime executionTime = LocalTime.parse(executionTimeParam);
 
             if (idParam == null || idParam.isEmpty()) {
-                Request newRequest = new Request(0, userId, serviceId, "Pending", executionDate, executionTime);
-                requestDao.saveRequest(newRequest);
+                requestService.createRequest(userId, serviceId, "Pending", executionDateParam, executionTimeParam);
             } else {
                 int id = Integer.parseInt(idParam);
-                Request updatedRequest = new Request(id, userId, serviceId, "Pending", executionDate, executionTime);
-                requestDao.updateRequest(updatedRequest);
+                requestService.editRequest(id, userId, serviceId, "Pending", executionDateParam, executionTimeParam);
             }
 
             return new Router("controller?command=dashboard", Router.Type.FORWARD);
-        } catch (DaoException e) {
+        } catch (ServiceException e) {
             request.setAttribute("error", "Failed to save request. Please try again.");
             return new Router("pages/add_request.jsp");
         }
