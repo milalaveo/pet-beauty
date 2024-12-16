@@ -2,6 +2,7 @@ package com.example.petbeauty.command.impl;
 
 import com.example.petbeauty.command.Command;
 import com.example.petbeauty.command.Router;
+import com.example.petbeauty.exception.ServiceException;
 import com.example.petbeauty.service.UserService;
 import com.example.petbeauty.service.impl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +31,7 @@ public class SignupCommand implements Command {
             }
 
             return new Router("pages/signup-complete.jsp");
-        } catch (Exception e) {
+        } catch (ServiceException e) {
             request.setAttribute("error", e.getMessage());
             return new Router("pages/signup.jsp");
         }

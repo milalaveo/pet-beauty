@@ -81,6 +81,13 @@ public class ConnectionPool {
         return connection;
     }
 
+    public void closePool() {
+        logger.info("Closing connection pool.");
+        closeConnections(usedConnections);
+        closeConnections(freeConnections);
+        logger.info("Connection pool closed.");
+    }
+
     public void releaseConnection(Connection connection) {
         try {
             if (!usedConnections.remove(connection)) {
@@ -94,6 +101,19 @@ public class ConnectionPool {
             );
         } catch (InterruptedException e) {
             logger.error("Failed to release connection to the pool.", e);
+        }
+    }
+
+    private void closeConnections(BlockingQueue<Connection> connections) {
+        Connection connection;
+        while ((connection = connections.poll()) != null) {
+            try {
+                if (!connection.isClosed()) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.error("Error closing connection", e);
+            }
         }
     }
 }

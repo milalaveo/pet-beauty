@@ -9,6 +9,7 @@ import com.example.petbeauty.service.RequestService;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class RequestServiceImpl implements RequestService {
@@ -17,8 +18,25 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public boolean createRequest(int userId, int serviceId, String status, String executionDate, String executionTime) throws ServiceException {
         try {
-            Request request = new Request(0, userId, serviceId, status, LocalDate.parse(executionDate), LocalTime.parse(executionTime));
+            LocalDate parsedDate;
+            LocalTime parsedTime;
+
+            try {
+                parsedDate = LocalDate.parse(executionDate);
+            } catch (DateTimeParseException e) {
+                throw new ServiceException("Invalid date format. Expected format: yyyy-MM-dd.", e);
+            }
+
+            try {
+                parsedTime = LocalTime.parse(executionTime);
+            } catch (DateTimeParseException e) {
+                throw new ServiceException("Invalid time format. Expected format: HH:mm.", e);
+            }
+
+            Request request = new Request(0, userId, serviceId, status, parsedDate, parsedTime);
             return requestDao.saveRequest(request);
+        } catch (DateTimeParseException e) {
+            throw new ServiceException("Invalid date", e);
         } catch (DaoException e) {
             throw new ServiceException("Error creating request", e);
         }
@@ -27,7 +45,22 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public boolean editRequest(int id, int userId, int serviceId, String status, String executionDate, String executionTime) throws ServiceException {
         try {
-            Request request = new Request(id, userId, serviceId, status, LocalDate.parse(executionDate), LocalTime.parse(executionTime));
+            LocalDate parsedDate;
+            LocalTime parsedTime;
+
+            try {
+                parsedDate = LocalDate.parse(executionDate);
+            } catch (DateTimeParseException e) {
+                throw new ServiceException("Invalid date format. Expected format: yyyy-MM-dd.", e);
+            }
+
+            try {
+                parsedTime = LocalTime.parse(executionTime);
+            } catch (DateTimeParseException e) {
+                throw new ServiceException("Invalid time format. Expected format: HH:mm.", e);
+            }
+
+            Request request = new Request(id, userId, serviceId, status, parsedDate, parsedTime);
             return requestDao.updateRequest(request);
         } catch (DaoException e) {
             throw new ServiceException("Error editing request", e);
@@ -56,7 +89,7 @@ public class RequestServiceImpl implements RequestService {
     public List<Request> getRequestsByUserId(int userId) throws ServiceException {
         try {
             return requestDao.findRequestsByUserId(userId);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error retrieving requests", e);
         }
     }

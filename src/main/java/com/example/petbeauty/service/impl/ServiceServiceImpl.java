@@ -2,6 +2,7 @@ package com.example.petbeauty.service.impl;
 
 import com.example.petbeauty.dao.ServiceDao;
 import com.example.petbeauty.dao.impl.ServiceDaoImpl;
+import com.example.petbeauty.exception.DaoException;
 import com.example.petbeauty.exception.ServiceException;
 import com.example.petbeauty.model.Service;
 import com.example.petbeauty.service.ServiceService;
@@ -18,7 +19,7 @@ public class ServiceServiceImpl implements ServiceService {
             BigDecimal parsedPrice = new BigDecimal(price);
             Service service = new Service(0, name, description, parsedPrice);
             return serviceDao.saveService(service);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error adding service", e);
         }
     }
@@ -29,7 +30,7 @@ public class ServiceServiceImpl implements ServiceService {
             BigDecimal parsedPrice = new BigDecimal(price);
             Service service = new Service(id, name, description, parsedPrice);
             return serviceDao.updateService(service);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error updating service", e);
         }
     }
@@ -38,7 +39,7 @@ public class ServiceServiceImpl implements ServiceService {
     public boolean removeService(int id) throws ServiceException {
         try {
             return serviceDao.deleteService(id);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error deleting service", e);
         }
     }
@@ -47,7 +48,7 @@ public class ServiceServiceImpl implements ServiceService {
     public List<Service> getAllServices() throws ServiceException {
         try {
             return serviceDao.findAllServices();
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error retrieving all services", e);
         }
     }
@@ -56,7 +57,7 @@ public class ServiceServiceImpl implements ServiceService {
     public Service getServiceById(int id) throws ServiceException {
         try {
             return serviceDao.findServiceById(id);
-        } catch (Exception e) {
+        } catch (DaoException e) {
             throw new ServiceException("Error retrieving service by ID", e);
         }
     }

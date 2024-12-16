@@ -3,6 +3,7 @@ package com.example.petbeauty.controller;
 import com.example.petbeauty.command.Command;
 import com.example.petbeauty.command.CommandType;
 import com.example.petbeauty.command.Router;
+import com.example.petbeauty.connection.ConnectionPool;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -61,6 +62,8 @@ public class Controller extends HttpServlet {
     }
 
     public void destroy() {
+        ConnectionPool.getInstance().closePool();
+        logger.info("Connection pool closed.");
         logger.info("Servlet destroyed.");
     }
 }
